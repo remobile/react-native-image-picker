@@ -1,5 +1,5 @@
 {
-    "name": "react-native-image-picker",
+    "name": "@remobile/react-native-image-picker",
         "version": "1.0.0",
         "description": "A image picker for react-native, supprt for ios and android",
         "main": "index.js",
