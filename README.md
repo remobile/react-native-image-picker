@@ -62,7 +62,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
   @Override
   public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
-      mImagePickerPackage.handleActivityResult(requestCode, resultCode, data);
+      mImagePickerPackage.onActivityResult(requestCode, resultCode, data);
   }
   // <----- add end
 }

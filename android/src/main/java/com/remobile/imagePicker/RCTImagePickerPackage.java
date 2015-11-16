@@ -44,11 +44,9 @@ public class RCTImagePickerPackage implements ReactPackage {
 		return Arrays.<ViewManager>asList();
 	}
 
-	public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent data) {
-		if (mModuleInstance == null) {
-			return false;
+	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+		if (mModuleInstance != null) {
+			mModuleInstance.onActivityResult(requestCode, resultCode, data);
 		}
-
-		return mModuleInstance.handleActivityResult(requestCode, resultCode, data);
 	}
 }

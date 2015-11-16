@@ -2,6 +2,7 @@
 *.DS_Store
 .DS_Store
 *Thumbs.db
+*.iml
 .gradle
 .idea
 npm-debug.log

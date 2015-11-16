@@ -59,7 +59,7 @@ public class RCTImagePicker extends ReactContextBaseJavaModule {
 		((Activity)mActivityContext).startActivityForResult(intent, 0);
 	}
 
-	public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent data) {
+	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 		if (requestCode == 0) {
 			WritableMap result = Arguments.createMap();
 			result.putNull("error");
@@ -80,8 +80,6 @@ public class RCTImagePicker extends ReactContextBaseJavaModule {
 				result.putString("error", "No images selected");
 			}
 			this.callback.invoke(result);
-			return true;
 		}
-		return false;
 	}
 }
