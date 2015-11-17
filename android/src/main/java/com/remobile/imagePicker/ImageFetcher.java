@@ -44,12 +44,12 @@ import android.widget.ImageView;
 /**
  * This helper class download images from the Internet and binds those with the
  * provided ImageView.
- * 
+ * <p/>
  * <p>
  * It requires the INTERNET permission, which should be added to your
  * application's manifest file.
  * </p>
- * 
+ * <p/>
  * A local cache of downloaded images is maintained internally to improve
  * performance.
  */
@@ -131,10 +131,9 @@ public class ImageFetcher {
     }
 
     /**
-     * @param imageView
-     *            Any imageView
+     * @param imageView Any imageView
      * @return Retrieve the currently active download task (if any) associated
-     *         with this imageView. null if there is no such task.
+     * with this imageView. null if there is no such task.
      */
     private static BitmapFetcherTask getBitmapDownloaderTask(ImageView imageView) {
         if (imageView != null) {
@@ -178,34 +177,34 @@ public class ImageFetcher {
          */
         @Override
         protected Bitmap doInBackground(Integer... params) {
-        	try {
-	            position = params[0];
-	            if (isCancelled()) {
-	                return null;
-	            }
-	            Bitmap thumb = MediaStore.Images.Thumbnails.getThumbnail(mContext.getContentResolver(), position, 12345,
-	                    MediaStore.Images.Thumbnails.MINI_KIND, null);
-	            if (isCancelled()) {
-	                return null;
-	            }
-	            if (thumb == null) {
-	                return null;
-	            } else {
-	                if (isCancelled()) {
-	                    return null;
-	                } else {
-	                    if (rotate != 0) {
-	                        Matrix matrix = new Matrix();
-	                        matrix.setRotate(rotate);
-	                        thumb = Bitmap.createBitmap(thumb, 0, 0, thumb.getWidth(), thumb.getHeight(), matrix, true);
-	                    }
-	                    return thumb;
-	                }
-	            }
-        	}catch(OutOfMemoryError error) {
-        		clearCache();
-        		return null;
-        	}
+            try {
+                position = params[0];
+                if (isCancelled()) {
+                    return null;
+                }
+                Bitmap thumb = MediaStore.Images.Thumbnails.getThumbnail(mContext.getContentResolver(), position, 12345,
+                        MediaStore.Images.Thumbnails.MINI_KIND, null);
+                if (isCancelled()) {
+                    return null;
+                }
+                if (thumb == null) {
+                    return null;
+                } else {
+                    if (isCancelled()) {
+                        return null;
+                    } else {
+                        if (rotate != 0) {
+                            Matrix matrix = new Matrix();
+                            matrix.setRotate(rotate);
+                            thumb = Bitmap.createBitmap(thumb, 0, 0, thumb.getWidth(), thumb.getHeight(), matrix, true);
+                        }
+                        return thumb;
+                    }
+                }
+            } catch (OutOfMemoryError error) {
+                clearCache();
+                return null;
+            }
 
         }
 
@@ -249,7 +248,7 @@ public class ImageFetcher {
     /**
      * A fake Drawable that will be attached to the imageView while the download
      * is in progress.
-     * 
+     * <p/>
      * <p>
      * Contains a reference to the actual download task, so that a download task
      * can be stopped if a new binding is required, and makes sure that only the
@@ -315,9 +314,8 @@ public class ImageFetcher {
 
     /**
      * Adds this bitmap to the cache.
-     * 
-     * @param bitmap
-     *            The newly downloaded bitmap.
+     *
+     * @param bitmap The newly downloaded bitmap.
      */
     private void addBitmapToCache(Integer position, Bitmap bitmap) {
         if (bitmap != null) {
@@ -328,8 +326,7 @@ public class ImageFetcher {
     }
 
     /**
-     * @param position
-     *            The URL of the image that will be retrieved from the cache.
+     * @param position The URL of the image that will be retrieved from the cache.
      * @return The cached bitmap or null if it was not found.
      */
     private Bitmap getBitmapFromCache(Integer position) {
