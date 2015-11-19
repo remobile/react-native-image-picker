@@ -9,11 +9,12 @@
 #import "RCTBridgeModule.h"
 #import "ELCAlbumPickerController.h"
 #import "ELCImagePickerController.h"
+#import "CDVCommandDelegateImpl.h"
 
 
 @interface RCTImagePicker : NSObject <RCTBridgeModule, ELCImagePickerControllerDelegate>
-@property (nonatomic, strong) RCTResponseSenderBlock callback;
 @property (nonatomic, strong) ELCImagePickerController *imagePicker;
+@property (nonatomic, strong) CDVCommandDelegateImpl* commandDelegate;
 
 @property (nonatomic, assign) NSInteger width;
 @property (nonatomic, assign) NSInteger height;
@@ -24,12 +25,12 @@
 
 @implementation RCTImagePicker
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(ImagePicker)
 
 
-RCT_EXPORT_METHOD(getPictures:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback) {
-    self.callback = callback;
-    
+RCT_EXPORT_METHOD(getPictures:(NSArray *)args success:(RCTResponseSenderBlock)success error:(RCTResponseSenderBlock)error) {
+    CDVCommandDelegateImpl* commandDelegate = [[CDVCommandDelegateImpl alloc]initWithCallback:success error:error];
+    NSDictionary *options = args[0];
     NSInteger maximumImagesCount = [[options objectForKey:@"maximumImagesCount"] integerValue];
     self.width = [[options objectForKey:@"width"] integerValue];
     self.height = [[options objectForKey:@"height"] integerValue];
@@ -52,22 +53,17 @@ RCT_EXPORT_METHOD(getPictures:(NSDictionary *)options callback:(RCTResponseSende
     imagePicker.imagePickerDelegate = self;
     
     albumController.parent = imagePicker;
+    self.commandDelegate = commandDelegate;
     self.imagePicker = imagePicker;
     
-    UIViewController *controller = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (controller.presentedViewController) {
-            [controller.presentedViewController presentViewController:imagePicker animated:YES completion:nil];
-        }
-        else {
-            [controller presentViewController:imagePicker animated:YES completion:nil];
-        }
+        [[CDVCommandDelegateImpl getTopPresentedViewController] presentViewController:imagePicker animated:YES completion:nil];
     });
 }
 
-
 - (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSArray *)info {
-    NSMutableArray *files = [[NSMutableArray alloc] init];
+    CDVPluginResult* result = nil;
+    NSMutableArray *resultStrings = [[NSMutableArray alloc] init];
     NSData* data = nil;
     NSString* docsPath = [NSTemporaryDirectory()stringByStandardizingPath];
     NSError* err = nil;
@@ -76,9 +72,6 @@ RCT_EXPORT_METHOD(getPictures:(NSDictionary *)options callback:(RCTResponseSende
     ALAsset* asset = nil;
     UIImageOrientation orientation = UIImageOrientationUp;;
     CGSize targetSize = CGSizeMake(self.width, self.height);
-    NSMutableDictionary *result = [NSMutableDictionary dictionary];
-    [result setObject:[NSNull null] forKey:@"error"];
-    
     for (NSDictionary *dict in info) {
         asset = [dict objectForKey:@"ALAsset"];
         // From ELCImagePickerController.m
@@ -96,7 +89,7 @@ RCT_EXPORT_METHOD(getPictures:(NSDictionary *)options callback:(RCTResponseSende
             //so use UIImageOrientationUp when creating our image below.
             if (picker.returnsOriginalImage) {
                 imgRef = [assetRep fullResolutionImage];
-                orientation = [assetRep orientation];
+                orientation = (UIImageOrientation)[assetRep orientation];
             } else {
                 imgRef = [assetRep fullScreenImage];
             }
@@ -110,28 +103,32 @@ RCT_EXPORT_METHOD(getPictures:(NSDictionary *)options callback:(RCTResponseSende
             }
             
             if (![data writeToFile:filePath options:NSAtomicWrite error:&err]) {
-                [result setObject:@"WriteFileError" forKey:@"error"];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION messageAsString:[err localizedDescription]];
                 break;
             } else {
-                [files addObject:[[NSURL fileURLWithPath:filePath] absoluteString]];
+                [resultStrings addObject:[[NSURL fileURLWithPath:filePath] absoluteString]];
             }
         }
         
     }
     
-    [result setObject:files forKey:@"files"];
+    if (nil == result) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:resultStrings];
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
     });
-    self.callback(@[result]);
+    [self.commandDelegate sendPluginResult:result];
 }
 
 - (void)elcImagePickerControllerDidCancel:(ELCImagePickerController *)picker {
     dispatch_async(dispatch_get_main_queue(), ^{
         [picker dismissViewControllerAnimated:YES completion:nil];
     });
-    self.callback(@[@{@"error":@"cancel"}]);
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"cancel"];
+    [self.commandDelegate sendPluginResult:pluginResult];
 }
 
 - (UIImage*)imageByScalingNotCroppingForSize:(UIImage*)anImage toSize:(CGSize)frameSize

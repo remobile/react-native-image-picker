@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.content.Context;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -16,18 +16,18 @@ import com.facebook.react.uimanager.ViewManager;
 
 public class RCTImagePickerPackage implements ReactPackage {
 
-    private Context mContext;
+    private Activity activity;
     private RCTImagePicker mModuleInstance;
 
-    public RCTImagePickerPackage(Context ctx) {
+    public RCTImagePickerPackage(Activity activity) {
         super();
-        mContext = ctx;
+        this.activity = activity;
     }
 
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        mModuleInstance = new RCTImagePicker(reactContext, mContext);
+        mModuleInstance = new RCTImagePicker(reactContext, activity);
         return Arrays.<NativeModule>asList(
                 mModuleInstance
         );

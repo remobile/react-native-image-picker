@@ -4,81 +4,89 @@
 package com.remobile.imagePicker;
 
 import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.content.Context;
 
+import com.facebook.common.logging.FLog;
+import com.remobile.cordova.*;
 import com.facebook.react.bridge.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class RCTImagePicker extends ReactContextBaseJavaModule {
-	private Callback callback;
-	private Context mActivityContext;
+    public static String LOG_TAG = "ImagePicker";
 
-	public RCTImagePicker(ReactApplicationContext reactContext, Context activityContext) {
-		super(reactContext);
-		mActivityContext = activityContext;
-	}
+    private CallbackContext callbackContext;
+    private JSONObject params;
 
-	@Override
-	public String getName() {
-		return "RCTImagePicker";
-	}
+    private Callback callback;
+    private Activity activity;
 
-	@ReactMethod
-	public void getPictures(ReadableMap options, Callback callback) throws Exception {
-		int max = 20;
-		int desiredWidth = 0;
-		int desiredHeight = 0;
-		int quality = 100;
+    public RCTImagePicker(ReactApplicationContext reactContext, Activity activity) {
+        super(reactContext);
+        this.activity = activity;
+    }
 
-		this.callback = callback;
+    @Override
+    public String getName() { return "RCTImagePicker"; }
+    protected Activity getActivity() { return activity; }
 
-		if (options.hasKey("maximumImagesCount") && !options.isNull("maximumImagesCount")) {
-			max = options.getInt("maximumImagesCount");
-		}
-		if (options.hasKey("width") && !options.isNull("width")) {
-			desiredWidth = options.getInt("width");
-		}
-		if (options.hasKey("height") && !options.isNull("height")) {
-			desiredWidth = options.getInt("height");
-		}
-		if (options.hasKey("quality") && !options.isNull("quality")) {
-			quality = options.getInt("quality");
-		}
+    @ReactMethod
+    public void getPictures(ReadableArray args, Callback success, Callback error) throws Exception {
+        String action = "getPictures";
+        try {
+            this.execute(action, JsonConvert.reactToJSON(args), new CallbackContext(success, error));
+        } catch (Exception ex) {
+            FLog.e(LOG_TAG, "Unexpected error:" + ex.getMessage());
+        }
+    }
 
+    public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+        this.callbackContext = callbackContext;
+        this.params = args.getJSONObject(0);
+        if (action.equals("getPictures")) {
+            Intent intent = new Intent(getActivity(), MultiImageChooserActivity.class);
+            int max = 20;
+            int desiredWidth = 0;
+            int desiredHeight = 0;
+            int quality = 100;
+            if (this.params.has("maximumImagesCount")) {
+                max = this.params.getInt("maximumImagesCount");
+            }
+            if (this.params.has("width")) {
+                desiredWidth = this.params.getInt("width");
+            }
+            if (this.params.has("height")) {
+                desiredWidth = this.params.getInt("height");
+            }
+            if (this.params.has("quality")) {
+                quality = this.params.getInt("quality");
+            }
+            intent.putExtra("MAX_IMAGES", max);
+            intent.putExtra("WIDTH", desiredWidth);
+            intent.putExtra("HEIGHT", desiredHeight);
+            intent.putExtra("QUALITY", quality);
+            getActivity().startActivityForResult(intent, 0);
+        }
+        return true;
+    }
 
-		ReactApplicationContext context = getReactApplicationContext();
-		Intent intent = new Intent(context, MultiImageChooserActivity.class);
-		intent.putExtra("MAX_IMAGES", max);
-		intent.putExtra("WIDTH", desiredWidth);
-		intent.putExtra("HEIGHT", desiredHeight);
-		intent.putExtra("QUALITY", quality);
-
-		((Activity)mActivityContext).startActivityForResult(intent, 0);
-	}
-
-	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-		if (requestCode == 0) {
-			WritableMap result = Arguments.createMap();
-			result.putNull("error");
-
-			if (resultCode == Activity.RESULT_OK && data != null) {
-				ArrayList<String> fileNames = data.getStringArrayListExtra("MULTIPLEFILENAMES");
-				WritableArray files = Arguments.createArray();
-				for (String filename : fileNames) {
-					files.pushString(filename);
-				}
-				result.putArray("files", files);
-			} else if (resultCode == Activity.RESULT_CANCELED && data != null) {
-				String error = data.getStringExtra("ERRORMESSAGE");
-				result.putString("error", error);
-			} else if (resultCode == Activity.RESULT_CANCELED) {
-				result.putString("error", "cancel");
-			} else {
-				result.putString("error", "No images selected");
-			}
-			this.callback.invoke(result);
-		}
-	}
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            ArrayList<String> fileNames = data.getStringArrayListExtra("MULTIPLEFILENAMES");
+            JSONArray res = new JSONArray(fileNames);
+            this.callbackContext.success(res);
+        } else if (resultCode == Activity.RESULT_CANCELED && data != null) {
+            String error = data.getStringExtra("ERRORMESSAGE");
+            this.callbackContext.error(error);
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            this.callbackContext.error("cancel");
+        } else {
+            this.callbackContext.error("No images selected");
+        }
+    }
 }

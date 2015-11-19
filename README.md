@@ -8,7 +8,7 @@ npm install @remobile/react-native-image-picker --save
 ### Installation (iOS)
 * Drag RCTImagePicker.xcodeproj to your project on Xcode.
 * Click on your main project file (the one that represents the .xcodeproj) select Build Phases and drag libRCTImagePicker.a from the Products folder inside the RCTImagePicker.xcodeproj.
-* Look for Header Search Paths and make sure it contains both $(SRCROOT)/../react-native/React as recursive.
+* Look for Header Search Paths and make sure it contains both $(SRCROOT)/../../../react-native/React as recursive.
 
 ### Installation (Android)
 ```gradle
@@ -84,14 +84,21 @@ var {
     View,
 } = React;
 
-var ImagePicker = require('react-native-image-picker');
-var Button = require('react-native-simple-button');
+var ImagePicker = require('@remobile/react-native-image-picker');
+var Button = require('@remobile/react-native-simple-button');
+var Dialogs = require('@remobile/react-native-dialogs');
 
 module.exports = React.createClass({
     onOpen() {
         var options = {maximumImagesCount: 10, width: 400};
-        ImagePicker.getPictures(options, (result) => {
-            console.log('result = ', result);
+        ImagePicker.getPictures(options, function(results) {
+            var msg = '';
+            for (var i = 0; i < results.length; i++) {
+                msg += 'Image URI: ' + results[i] + '\n';
+            }
+            Dialogs.alert(msg);
+        }, function (error) {
+            Dialogs.alert('Error: ' + error);
         });
     },
     render() {
@@ -114,10 +121,8 @@ var styles = StyleSheet.create({
 });
 ```
 
-### method
-- `getPictures(options, callback)`
-* options = {maximumImagesCount:Int, width: Int, height: Int, quality:Int}
-* callback(result) result={error:String, files:Array<String>}
+### HELP
+* look https://github.com/wymsee/cordova-imagePicker
 
 
 ### thanks
