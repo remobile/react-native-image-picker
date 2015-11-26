@@ -26,5 +26,8 @@
         "repository": {
             "type": "git",
             "url": "git://github.com/remobile/react-native-image-picker.git"
+        },
+        "peerDependencies": {
+            "@remobile/react-native-cordova": "^1.0.1"
         }
 }

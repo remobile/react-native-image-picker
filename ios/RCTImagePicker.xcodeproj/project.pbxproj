@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		32A87DDD1BF427700048D713 /* RCTImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A87DDC1BF427700048D713 /* RCTImagePicker.m */; };
+		3271E3AC1C02FCA000A1C2B4 /* SOSPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3271E3AB1C02FCA000A1C2B4 /* SOSPicker.m */; };
 		32A87E401BF42C480048D713 /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A87E2D1BF42C480048D713 /* ELCAlbumPickerController.m */; };
 		32A87E411BF42C480048D713 /* ELCAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A87E2F1BF42C480048D713 /* ELCAsset.m */; };
 		32A87E421BF42C480048D713 /* ELCAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A87E311BF42C480048D713 /* ELCAssetCell.m */; };
@@ -28,8 +28,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3271E3AA1C02FCA000A1C2B4 /* SOSPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOSPicker.h; sourceTree = "<group>"; };
+		3271E3AB1C02FCA000A1C2B4 /* SOSPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SOSPicker.m; sourceTree = "<group>"; };
 		32A87DD71BF427700048D713 /* libRCTImagePicker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTImagePicker.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		32A87DDC1BF427700048D713 /* RCTImagePicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTImagePicker.m; sourceTree = "<group>"; };
 		32A87E2C1BF42C480048D713 /* ELCAlbumPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAlbumPickerController.h; sourceTree = "<group>"; };
 		32A87E2D1BF42C480048D713 /* ELCAlbumPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCAlbumPickerController.m; sourceTree = "<group>"; };
 		32A87E2E1BF42C480048D713 /* ELCAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAsset.h; sourceTree = "<group>"; };
@@ -80,7 +81,8 @@
 			isa = PBXGroup;
 			children = (
 				32A87E2B1BF42C480048D713 /* ELCImagePicker */,
-				32A87DDC1BF427700048D713 /* RCTImagePicker.m */,
+				3271E3AA1C02FCA000A1C2B4 /* SOSPicker.h */,
+				3271E3AB1C02FCA000A1C2B4 /* SOSPicker.m */,
 			);
 			path = RCTImagePicker;
 			sourceTree = "<group>";
@@ -176,8 +178,8 @@
 				32A87E401BF42C480048D713 /* ELCAlbumPickerController.m in Sources */,
 				32A87E421BF42C480048D713 /* ELCAssetCell.m in Sources */,
 				32A87E441BF42C480048D713 /* ELCImagePickerController.m in Sources */,
+				3271E3AC1C02FCA000A1C2B4 /* SOSPicker.m in Sources */,
 				32A87E411BF42C480048D713 /* ELCAsset.m in Sources */,
-				32A87DDD1BF427700048D713 /* RCTImagePicker.m in Sources */,
 				32A87E431BF42C480048D713 /* ELCAssetTablePicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

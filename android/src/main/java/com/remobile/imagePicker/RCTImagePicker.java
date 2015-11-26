@@ -17,23 +17,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class RCTImagePicker extends ReactContextBaseJavaModule {
+public class RCTImagePicker extends CordovaPlugin {
     public static String LOG_TAG = "ImagePicker";
 
     private CallbackContext callbackContext;
     private JSONObject params;
 
-    private Callback callback;
-    private Activity activity;
 
     public RCTImagePicker(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);
-        this.activity = activity;
+        this.cordova.setActivity(activity);
     }
 
     @Override
     public String getName() { return "RCTImagePicker"; }
-    protected Activity getActivity() { return activity; }
 
     @ReactMethod
     public void getPictures(ReadableArray args, Callback success, Callback error) throws Exception {
@@ -49,7 +46,7 @@ public class RCTImagePicker extends ReactContextBaseJavaModule {
         this.callbackContext = callbackContext;
         this.params = args.getJSONObject(0);
         if (action.equals("getPictures")) {
-            Intent intent = new Intent(getActivity(), MultiImageChooserActivity.class);
+            Intent intent = new Intent(this.cordova.getActivity(), MultiImageChooserActivity.class);
             int max = 20;
             int desiredWidth = 0;
             int desiredHeight = 0;
@@ -70,12 +67,15 @@ public class RCTImagePicker extends ReactContextBaseJavaModule {
             intent.putExtra("WIDTH", desiredWidth);
             intent.putExtra("HEIGHT", desiredHeight);
             intent.putExtra("QUALITY", quality);
-            getActivity().startActivityForResult(intent, 0);
+            this.cordova.getActivity().startActivityForResult(intent, 0);
         }
         return true;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (this.callbackContext == null) {
+            return;
+        }
         if (resultCode == Activity.RESULT_OK && data != null) {
             ArrayList<String> fileNames = data.getStringArrayListExtra("MULTIPLEFILENAMES");
             JSONArray res = new JSONArray(fileNames);
@@ -88,5 +88,6 @@ public class RCTImagePicker extends ReactContextBaseJavaModule {
         } else {
             this.callbackContext.error("No images selected");
         }
+        this.callbackContext = null;
     }
 }
