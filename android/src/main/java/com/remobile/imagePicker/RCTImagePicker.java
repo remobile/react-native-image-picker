@@ -33,7 +33,7 @@ public class RCTImagePicker extends CordovaPlugin {
     public String getName() { return "RCTImagePicker"; }
 
     @ReactMethod
-    public void getPictures(ReadableArray args, Callback success, Callback error) throws Exception {
+    public void getPictures(ReadableArray args, Callback success, Callback error) {
         String action = "getPictures";
         try {
             this.execute(action, JsonConvert.reactToJSON(args), new CallbackContext(success, error));
