@@ -14,7 +14,7 @@ npm install @remobile/react-native-image-picker --save
 ```gradle
 ...
 include ':react-native-image-picker'
-project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-picker/android/RCTImagePicker')
+project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/@remobile/react-native-image-picker/android/RCTImagePicker')
 ```
 
 * In `android/app/build.gradle`

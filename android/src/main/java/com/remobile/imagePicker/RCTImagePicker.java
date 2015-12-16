@@ -23,7 +23,6 @@ public class RCTImagePicker extends CordovaPlugin {
     private CallbackContext callbackContext;
     private JSONObject params;
 
-
     public RCTImagePicker(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);
         this.cordova.setActivity(activity);
@@ -67,27 +66,29 @@ public class RCTImagePicker extends CordovaPlugin {
             intent.putExtra("WIDTH", desiredWidth);
             intent.putExtra("HEIGHT", desiredHeight);
             intent.putExtra("QUALITY", quality);
-            this.cordova.getActivity().startActivityForResult(intent, 0);
+            this.cordova.startActivityForResult(this, intent, cordova.IMAGE_PICKER_RESULT);
         }
         return true;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (this.callbackContext == null) {
-            return;
+        if (requestCode == cordova.IMAGE_PICKER_RESULT) {
+            if (this.callbackContext == null) {
+                return;
+            }
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                ArrayList<String> fileNames = data.getStringArrayListExtra("MULTIPLEFILENAMES");
+                JSONArray res = new JSONArray(fileNames);
+                this.callbackContext.success(res);
+            } else if (resultCode == Activity.RESULT_CANCELED && data != null) {
+                String error = data.getStringExtra("ERRORMESSAGE");
+                this.callbackContext.error(error);
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                this.callbackContext.error("cancel");
+            } else {
+                this.callbackContext.error("No images selected");
+            }
+            this.callbackContext = null;
         }
-        if (resultCode == Activity.RESULT_OK && data != null) {
-            ArrayList<String> fileNames = data.getStringArrayListExtra("MULTIPLEFILENAMES");
-            JSONArray res = new JSONArray(fileNames);
-            this.callbackContext.success(res);
-        } else if (resultCode == Activity.RESULT_CANCELED && data != null) {
-            String error = data.getStringExtra("ERRORMESSAGE");
-            this.callbackContext.error(error);
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-            this.callbackContext.error("cancel");
-        } else {
-            this.callbackContext.error("No images selected");
-        }
-        this.callbackContext = null;
     }
 }

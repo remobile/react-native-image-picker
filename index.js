@@ -16,8 +16,8 @@ var RCTImagePicker = NativeModules.ImagePicker;
 var ImagePicker = {
     getPictures:function(options, successCallback, errorCallback) {
         options = options||{};
-        successCallback = successCallback || ()=>{};
-        errorCallback = errorCallback || ()=>{};
+        successCallback = successCallback || (()=>{});
+        errorCallback = errorCallback || (()=>{});
         var params = {
             maximumImagesCount: options.maximumImagesCount ? options.maximumImagesCount : 15,
             width: options.width ? options.width : 0,
