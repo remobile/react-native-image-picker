@@ -70,8 +70,11 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
 
 ### Screencasts
 * ios
+<br>
 ![ios](https://github.com/remobile/react-native-image-picker/blob/master/screencasts/ios.gif)
+<br>
 * android
+<br>
 ![android](https://github.com/remobile/react-native-image-picker/blob/master/screencasts/android.png)
 
 ## Usage
