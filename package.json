@@ -28,6 +28,6 @@
             "url": "git://github.com/remobile/react-native-image-picker.git"
         },
         "peerDependencies": {
-            "@remobile/react-native-cordova": "^1.0.6"
+            "@remobile/react-native-cordova": "^1.0.9"
         }
 }
