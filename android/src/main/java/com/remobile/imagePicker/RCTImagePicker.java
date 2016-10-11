@@ -23,9 +23,8 @@ public class RCTImagePicker extends CordovaPlugin {
     private CallbackContext callbackContext;
     private JSONObject params;
 
-    public RCTImagePicker(ReactApplicationContext reactContext, Activity activity) {
+    public RCTImagePicker(ReactApplicationContext reactContext) {
         super(reactContext);
-        this.cordova.setActivity(activity);
     }
 
     @Override
@@ -33,14 +32,10 @@ public class RCTImagePicker extends CordovaPlugin {
 
     @ReactMethod
     public void getPictures(ReadableArray args, Callback success, Callback error) {
-        String action = "getPictures";
-        try {
-            this.execute(action, JsonConvert.reactToJSON(args), new CallbackContext(success, error));
-        } catch (Exception ex) {
-            FLog.e(LOG_TAG, "Unexpected error:" + ex.getMessage());
-        }
+        executeReactMethod("getPictures", args, success, error);
     }
 
+    @Override
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;
         this.params = args.getJSONObject(0);
@@ -66,13 +61,14 @@ public class RCTImagePicker extends CordovaPlugin {
             intent.putExtra("WIDTH", desiredWidth);
             intent.putExtra("HEIGHT", desiredHeight);
             intent.putExtra("QUALITY", quality);
-            this.cordova.startActivityForResult(this, intent, cordova.IMAGE_PICKER_RESULT);
+            this.cordova.startActivityForResult(this, intent, 0);
         }
         return true;
     }
 
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == cordova.IMAGE_PICKER_RESULT) {
+        if (requestCode == 0) {
             if (this.callbackContext == null) {
                 return;
             }

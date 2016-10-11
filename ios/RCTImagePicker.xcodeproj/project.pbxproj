@@ -43,11 +43,6 @@
 		32A87E351BF42C480048D713 /* ELCAssetTablePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCAssetTablePicker.m; sourceTree = "<group>"; };
 		32A87E361BF42C480048D713 /* ELCImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCImagePickerController.h; sourceTree = "<group>"; };
 		32A87E371BF42C480048D713 /* ELCImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCImagePickerController.m; sourceTree = "<group>"; };
-		32A87E391BF42C480048D713 /* ELCAlbumPickerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAlbumPickerController.xib; sourceTree = "<group>"; };
-		32A87E3A1BF42C480048D713 /* ELCAssetPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetPicker.xib; sourceTree = "<group>"; };
-		32A87E3B1BF42C480048D713 /* ELCAssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetTablePicker.xib; sourceTree = "<group>"; };
-		32A87E3C1BF42C480048D713 /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Overlay.png; sourceTree = "<group>"; };
-		32A87E3D1BF42C480048D713 /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Overlay@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,21 +97,8 @@
 				32A87E351BF42C480048D713 /* ELCAssetTablePicker.m */,
 				32A87E361BF42C480048D713 /* ELCImagePickerController.h */,
 				32A87E371BF42C480048D713 /* ELCImagePickerController.m */,
-				32A87E381BF42C480048D713 /* Resources */,
 			);
 			path = ELCImagePicker;
-			sourceTree = "<group>";
-		};
-		32A87E381BF42C480048D713 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				32A87E391BF42C480048D713 /* ELCAlbumPickerController.xib */,
-				32A87E3A1BF42C480048D713 /* ELCAssetPicker.xib */,
-				32A87E3B1BF42C480048D713 /* ELCAssetTablePicker.xib */,
-				32A87E3C1BF42C480048D713 /* Overlay.png */,
-				32A87E3D1BF42C480048D713 /* Overlay@2x.png */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,6 +111,7 @@
 				32A87DD31BF427700048D713 /* Sources */,
 				32A87DD41BF427700048D713 /* Frameworks */,
 				32A87DD51BF427700048D713 /* CopyFiles */,
+				FE85D3861CBCDB2E001F9B14 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -169,6 +152,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FE85D3861CBCDB2E001F9B14 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		32A87DD31BF427700048D713 /* Sources */ = {
@@ -273,6 +266,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../react-native/React/**",
 					"$(SRCROOT)/../../react-native-cordova/ios/RCTCordova",
+					"$(SRCROOT)/../../../../../node_modules/react-native/React/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -288,6 +282,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../react-native/React/**",
 					"$(SRCROOT)/../../react-native-cordova/ios/RCTCordova",
+					"$(SRCROOT)/../../../../../node_modules/react-native/React/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
