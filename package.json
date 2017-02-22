@@ -1,6 +1,6 @@
 {
     "name": "@remobile/react-native-image-picker",
-        "version": "1.0.4",
+        "version": "1.0.5",
         "description": "A image picker for react-native, support for ios and android",
         "main": "index.js",
         "author": {
@@ -28,6 +28,6 @@
             "url": "git://github.com/remobile/react-native-image-picker.git"
         },
         "peerDependencies": {
-            "@remobile/react-native-cordova": "^1.1.0"
+            "@remobile/react-native-cordova": "^1.1.1"
         }
 }
